@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.SceneManagement;
 
 public class Gamemanager : MonoBehaviourPunCallbacks
 {
@@ -35,16 +34,20 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     [SerializeField] Text loseText;
     [SerializeField] GameObject waitingPanel;
     [SerializeField] Text playerCountText;
+    [SerializeField] Text countdownText;
+    [SerializeField] Text waitingText;
     [SerializeField] Transform[] spawnPoints;
 
     bool isLeftTeam;
+
+    public MoveJoystick moveJoystick;
 
     void Awake()
     {
         instance = this;
         Application.targetFrameRate = 240;
-        PhotonNetwork.SendRate = 60;
-        PhotonNetwork.SerializationRate = 30;
+        PhotonNetwork.SendRate = 120;
+        PhotonNetwork.SerializationRate = 60;
     }
 
     void Start()
@@ -146,6 +149,10 @@ public class Gamemanager : MonoBehaviourPunCallbacks
         Init();
         SetActivePanel(lobbyPanel.name);
         nicknameInput.text = "User" + Random.Range(0, 1000);
+
+        moveJoystick.blinkButton.interactable = true;
+        moveJoystick.coolTimeText.gameObject.SetActive(false);
+        moveJoystick.coolTimeImage.fillAmount = 1f;
     }
 
     public void QuitBtn(int num)
@@ -163,6 +170,8 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     void Init()
     {
         waitingPanel.SetActive(true);
+        waitingText.gameObject.SetActive(true);
+        countdownText.gameObject.SetActive(false);
         winLosePanel.SetActive(false);
         isWin = false;
         isLeftTeam = false;
@@ -174,7 +183,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
         pv.RPC("PlayerCountT", RpcTarget.AllBuffered);
 
         if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
-            StartCoroutine(GameStart());
+            pv.RPC("StartGame", RpcTarget.AllBuffered);
     }
 
     void SetActivePanel(string panelName)
@@ -192,15 +201,26 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
     IEnumerator GameStart()
     {
-        yield return new WaitForSeconds(3f);
-        pv.RPC("StartGame", RpcTarget.AllBuffered);
+        waitingText.gameObject.SetActive(false);
+        countdownText.gameObject.SetActive(true);
+
+        int count = 3;
+
+        while (count > 0)
+        {
+            countdownText.text = count.ToString();
+            yield return new WaitForSeconds(1);
+            count--;
+        }
+
+        waitingPanel.SetActive(false);
+        isGameStart = true;
     }
 
     [PunRPC]
     void StartGame()
     {
-        waitingPanel.SetActive(false);
-        isGameStart = true;
+        StartCoroutine(GameStart());
     }
 
     [PunRPC]
@@ -208,18 +228,4 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     {
         playerCountText.text = PhotonNetwork.CurrentRoom.PlayerCount + " / " + PhotonNetwork.CurrentRoom.MaxPlayers;
     }
-
-
-    //IEnumerator DestroyObj()
-    //{
-    //    yield return new WaitForSeconds(0.2f);
-    //    foreach(GameObject go in GameObject.FindGameObjectsWithTag("Axe"))
-    //    {
-    //        go.GetComponent<PhotonView>().RPC("DestroyRPC", RpcTarget.AllBuffered);
-    //    }
-    //    foreach (GameObject go in GameObject.FindGameObjectsWithTag("Effect"))
-    //    {
-    //        go.GetComponent<PhotonView>().RPC("DestroyParticleRPC", RpcTarget.AllBuffered);
-    //    }
-    //}
 }

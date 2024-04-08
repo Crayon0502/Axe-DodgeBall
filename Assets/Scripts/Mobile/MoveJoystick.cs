@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class MoveJoystick : JoystickScript
 {
-    [SerializeField] Button blinkButton;
-    [SerializeField] Image coolTimeImage;
-    [SerializeField] Text coolTimeText;
-    [SerializeField] float blinkCollTime = 60f;
+    public Button blinkButton;
+    public Image coolTimeImage;
+    public Text coolTimeText;
+    [SerializeField] float blinkCollTime = 10f;
 
     public PlayerMove pm;
 

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerMove : MonoBehaviourPunCallbacks
+public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
 {
     [SerializeField] float speed;
     CharacterController cc;
@@ -14,6 +11,8 @@ public class PlayerMove : MonoBehaviourPunCallbacks
     MoveJoystick mj;
 
     public bool isAttacking = false;
+
+    Vector3 curPos;
 
     void Start()
     {
@@ -27,6 +26,17 @@ public class PlayerMove : MonoBehaviourPunCallbacks
         {
             mj.pm = this;
             camMove.player = transform;
+        }
+    }
+
+    void Update()
+    {
+        if (!state.pv.IsMine)
+        {
+            if ((transform.position - curPos).sqrMagnitude >= 100)
+                transform.position = curPos;
+            else
+                transform.position = Vector3.Lerp(transform.position, curPos, Time.deltaTime * 10);
         }
     }
 
@@ -85,5 +95,17 @@ public class PlayerMove : MonoBehaviourPunCallbacks
     public void SetAttacking(bool attacking)
     {
         isAttacking = attacking;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+        }
+        else
+        {
+            curPos = (Vector3)stream.ReceiveNext();
+        }
     }
 }
