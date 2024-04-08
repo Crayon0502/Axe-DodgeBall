@@ -91,6 +91,9 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        if (isGameStart)
+            PhotonNetwork.LeaveRoom();
+
         SetActivePanel(inGamePanel.name);
         waitingPanel.SetActive(true);
         roomNameText.text = "πÊ ¿Ã∏ß : " + PhotonNetwork.CurrentRoom.Name;
