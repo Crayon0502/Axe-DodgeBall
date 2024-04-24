@@ -307,7 +307,7 @@ MonoBehaviour:
   NicknameText: {fileID: 4184566193903260029}
   Hp_bar: {fileID: 6985308615257964678}
   hp: 0
-  maxHp: 10
+  maxHp: 12
 --- !u!114 &3834320372550810000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,7 +826,7 @@ GameObject:
   - component: {fileID: 7950091296808015530}
   m_Layer: 0
   m_Name: Range Image
-  m_TagString: Untagged
+  m_TagString: Range
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1743,9 +1743,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2688355993001542846}
+  - component: {fileID: 7515847128582530674}
+  - component: {fileID: 8192159432055205969}
   m_Layer: 0
   m_Name: AtkRange
-  m_TagString: Untagged
+  m_TagString: Range
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1766,6 +1768,40 @@ Transform:
   m_Father: {fileID: 1426555835064035072}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7515847128582530674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5904951141537683823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a083aeb24f7993408409bcf87b5fab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8192159432055205969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5904951141537683823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6110477349620356016
 GameObject:
   m_ObjectHideFlags: 0

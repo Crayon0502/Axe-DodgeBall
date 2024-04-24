@@ -8,6 +8,7 @@ TagManager:
   - Axe
   - Line
   - Effect
+  - Range
   layers:
   - Default
   - TransparentFX

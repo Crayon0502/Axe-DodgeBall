@@ -130,6 +130,6 @@ public class PlayerAttack : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        Destroy(atkRange);
+        Destroy(gameObject);
     }
 }

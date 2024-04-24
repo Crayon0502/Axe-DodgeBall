@@ -35,10 +35,10 @@ public class State : MonoBehaviourPunCallbacks
         pv.RPC("OnHit", RpcTarget.AllBuffered, hp);
     }
 
-    public override void OnLeftRoom()
-    {
-        Destroy(gameObject);
-    }
+    //public override void OnLeftRoom()
+    //{
+    //    Destroy(gameObject);
+    //}
 
     [PunRPC]
     void OnHit(float hp)

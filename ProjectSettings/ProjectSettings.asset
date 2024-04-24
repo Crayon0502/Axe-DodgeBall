@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Lee Hyeong-min
-  productName: Axe Dodgeball
+  companyName: LeeSaBit
+  productName: Skeleton Dodgeball
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -154,7 +154,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.LeeHyeongmin.AxeDodgeball
+    Android: com.LeeSaBit.SkeletonDodgeball
   buildNumber:
     Bratwurst: 0
     Standalone: 0
@@ -279,7 +279,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: d81332b1db75a8841bd045b2ad027225, type: 3}
+      m_Icon: {fileID: 2800000, guid: 3b632cd7b21fe6e4fb04b4546beda79d, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

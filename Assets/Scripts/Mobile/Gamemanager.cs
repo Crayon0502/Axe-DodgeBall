@@ -29,6 +29,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     [SerializeField] Button startButton;
     [SerializeField] Button fastStartButton;
     [SerializeField] Text stateText;
+    [SerializeField] Text virsionText;
     [SerializeField] Text roomNameText;
     [SerializeField] Text winText;
     [SerializeField] Text loseText;
@@ -41,6 +42,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     bool isLeftTeam;
 
     public MoveJoystick moveJoystick;
+    string gameVersion = "0.1.0";
 
     void Awake()
     {
@@ -48,6 +50,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
         Application.targetFrameRate = 240;
         PhotonNetwork.SendRate = 120;
         PhotonNetwork.SerializationRate = 60;
+        PhotonNetwork.GameVersion = gameVersion;
     }
 
     void Start()
@@ -80,6 +83,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         stateText.text = "서버 접속 완료";
+        virsionText.text = gameVersion;
         startButton.interactable = true;
         fastStartButton.interactable = true;
     }
@@ -113,7 +117,12 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 2;
-        PhotonNetwork.CreateRoom(roomNameInput.text, roomOptions, null);
+        PhotonNetwork.CreateRoom("Room" + Random.Range(0, 1000), roomOptions, null);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        stateText.text = "참가할 수 없는 방입니다. 다른 방에 접속해주십시오";
     }
 
     public void GameStartBtn()
@@ -147,15 +156,17 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
     public void RestartGame()
     {
+        string tempName = nicknameInput.text;
         nicknameInput.text = "";
         PhotonNetwork.LeaveRoom();
         Init();
         SetActivePanel(lobbyPanel.name);
-        nicknameInput.text = "User" + Random.Range(0, 1000);
+        nicknameInput.text = tempName;
 
         moveJoystick.blinkButton.interactable = true;
         moveJoystick.coolTimeText.gameObject.SetActive(false);
         moveJoystick.coolTimeImage.fillAmount = 1f;
+        stateText.text = "서버 접속 완료";
     }
 
     public void QuitBtn(int num)
@@ -223,6 +234,8 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     [PunRPC]
     void StartGame()
     {
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
         StartCoroutine(GameStart());
     }
 
