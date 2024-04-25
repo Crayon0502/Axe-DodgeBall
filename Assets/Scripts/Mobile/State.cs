@@ -16,10 +16,12 @@ public class State : MonoBehaviourPunCallbacks
     [SerializeField] float maxHp;
 
     Animator anim;
+    AudioSource audioSource;
 
     void Start()
     {
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         hp = maxHp;
 
@@ -35,21 +37,18 @@ public class State : MonoBehaviourPunCallbacks
         pv.RPC("OnHit", RpcTarget.AllBuffered, hp);
     }
 
-    //public override void OnLeftRoom()
-    //{
-    //    Destroy(gameObject);
-    //}
-
     [PunRPC]
     void OnHit(float hp)
     {
         Hp_bar.fillAmount = hp / maxHp;
-
+        audioSource.Play();
+        
         if (hp <= 0)
         {
             isDead = true;
             anim.SetTrigger("isDie");
             Gamemanager.instance.IsWin = !pv.IsMine;
         }
+
     }
 }

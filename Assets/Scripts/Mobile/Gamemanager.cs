@@ -28,6 +28,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     [SerializeField] InputField roomNameInput;
     [SerializeField] Button startButton;
     [SerializeField] Button fastStartButton;
+    [SerializeField] Button exitButton;
     [SerializeField] Text stateText;
     [SerializeField] Text virsionText;
     [SerializeField] Text roomNameText;
@@ -38,6 +39,10 @@ public class Gamemanager : MonoBehaviourPunCallbacks
     [SerializeField] Text countdownText;
     [SerializeField] Text waitingText;
     [SerializeField] Transform[] spawnPoints;
+    [SerializeField] Transform cam;
+    [SerializeField] AudioSource countAudioSource;
+
+    AudioSource audioSource;
 
     bool isLeftTeam;
 
@@ -51,6 +56,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
         PhotonNetwork.SendRate = 120;
         PhotonNetwork.SerializationRate = 60;
         PhotonNetwork.GameVersion = gameVersion;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -127,6 +133,9 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
     public void GameStartBtn()
     {
+        cam.GetComponent<CameraMove>().enabled = true;
+        audioSource.Play();
+
         if (!string.IsNullOrWhiteSpace(nicknameInput.text) && !string.IsNullOrWhiteSpace(roomNameInput.text))
         {
             PhotonNetwork.LocalPlayer.NickName = nicknameInput.text;
@@ -143,6 +152,9 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
     public void FastGameStartBtn()
     {
+        cam.GetComponent<CameraMove>().enabled = true;
+        audioSource.Play();
+
         if (!string.IsNullOrWhiteSpace(nicknameInput.text))
         {
             PhotonNetwork.LocalPlayer.NickName = nicknameInput.text;
@@ -156,6 +168,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
     public void RestartGame()
     {
+        audioSource.Play();
         string tempName = nicknameInput.text;
         nicknameInput.text = "";
         PhotonNetwork.LeaveRoom();
@@ -171,6 +184,8 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
     public void QuitBtn(int num)
     {
+        audioSource.Play();
+
         if (num == 1)
         {
             Application.Quit();
@@ -183,6 +198,8 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
     void Init()
     {
+        cam.GetComponent<CameraMove>().enabled = false;
+        cam.transform.position = new Vector3(0, 12.5f, -10);
         waitingPanel.SetActive(true);
         waitingText.gameObject.SetActive(true);
         countdownText.gameObject.SetActive(false);
@@ -211,10 +228,12 @@ public class Gamemanager : MonoBehaviourPunCallbacks
         winLosePanel.SetActive(true);
         winText.gameObject.SetActive(IsWin);
         loseText.gameObject.SetActive(!IsWin);
+        exitButton.gameObject.SetActive(true);
     }
 
     IEnumerator GameStart()
     {
+        exitButton.gameObject.SetActive(false);
         waitingText.gameObject.SetActive(false);
         countdownText.gameObject.SetActive(true);
 
@@ -222,6 +241,7 @@ public class Gamemanager : MonoBehaviourPunCallbacks
 
         while (count > 0)
         {
+            countAudioSource.Play();
             countdownText.text = count.ToString();
             yield return new WaitForSeconds(1);
             count--;

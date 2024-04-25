@@ -14,6 +14,7 @@ public class PlayerAttack : MonoBehaviourPunCallbacks
     [SerializeField] Image coolTimeImage;
     [SerializeField] float throwForce = 20f;
     [SerializeField] float attackSpeed = 1.5f;
+    [SerializeField] AudioSource audioSource;
 
     [SerializeField] LayerMask lm;
     Animator anim;
@@ -59,6 +60,7 @@ public class PlayerAttack : MonoBehaviourPunCallbacks
 
         handAxe.SetActive(false);
 
+        state.pv.RPC("Atk", RpcTarget.AllBuffered);
         GameObject axe = PhotonNetwork.Instantiate("Axe", startPos.position, startPos.rotation);
 
         Axe axeController = axe.GetComponent<Axe>();
@@ -131,5 +133,11 @@ public class PlayerAttack : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         Destroy(gameObject);
+    }
+
+    [PunRPC]
+    void Atk()
+    {
+        audioSource.Play();
     }
 }

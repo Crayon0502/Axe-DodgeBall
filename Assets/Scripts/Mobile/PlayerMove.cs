@@ -4,6 +4,7 @@ using Photon.Pun;
 public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
 {
     [SerializeField] float speed;
+    [SerializeField] AudioSource audioSource;
     CharacterController cc;
     Animator anim;
     CameraMove camMove;
@@ -67,6 +68,7 @@ public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
         if (state.isDead) return;
 
         state.pv.RPC("BlinkEffect", RpcTarget.AllBuffered, transform.position);
+        state.pv.RPC("BlinkSound", RpcTarget.AllBuffered);
 
         Vector3 moveDir = new Vector3(inputDir.x, 0, inputDir.y);
         Vector3 blinkPosition = transform.position + moveDir * 3f;
@@ -91,6 +93,13 @@ public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.Instantiate("BlinkEffect", pos, Quaternion.identity);
     }
 
+    [PunRPC]
+    void BlinkSound()
+    {
+        if (state.isDead) return;
+        audioSource.Play();
+    }
+
     // 공격 중인지 여부 설정
     public void SetAttacking(bool attacking)
     {
@@ -108,4 +117,5 @@ public class PlayerMove : MonoBehaviourPunCallbacks, IPunObservable
             curPos = (Vector3)stream.ReceiveNext();
         }
     }
+
 }

@@ -91,7 +91,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   circle: {fileID: 4617756850886177715}
-  circleRange: 100
+  circleRange: 150
+  blinkButton: {fileID: 0}
+  coolTimeImage: {fileID: 0}
+  coolTimeText: {fileID: 0}
+  blinkCollTime: 10
+  pm: {fileID: 0}
 --- !u!1 &5704082227938031990
 GameObject:
   m_ObjectHideFlags: 0
